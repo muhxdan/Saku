@@ -2,29 +2,30 @@ package com.salt.apps.saku.ui.activity
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.salt.apps.core.domain.model.UserData
+import com.salt.apps.core.domain.usecase.SettingUseCase
+import com.salt.apps.saku.ui.activity.MainActivityState.Loading
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor() : ViewModel() {
-    private val _uiState = MutableStateFlow<MainActivityUiState>(MainActivityUiState.Loading)
-    val uiState: StateFlow<MainActivityUiState> = _uiState
-
-    init {
-        viewModelScope.launch {
-            delay(2000)
-            _uiState.value = MainActivityUiState.Success(userData = UserData("Success"))
-        }
-    }
+class MainViewModel @Inject constructor(
+    private val settingUseCase: SettingUseCase
+) : ViewModel() {
+    val mainActivityStateStateFlow: StateFlow<MainActivityState> =
+        settingUseCase.userData.map<UserData, MainActivityState>(MainActivityState::Success)
+            .stateIn(
+                scope = viewModelScope,
+                initialValue = Loading,
+                started = SharingStarted.WhileSubscribed(5_000),
+            )
 }
 
-sealed interface MainActivityUiState {
-    data object Loading : MainActivityUiState
-    data class Success(val userData: UserData) : MainActivityUiState
+sealed interface MainActivityState {
+    data object Loading : MainActivityState
+    data class Success(val userData: UserData) : MainActivityState
 }
-
-data class UserData(val status: String = "Loading")

@@ -1,0 +1,9 @@
+<resources>
+
+    <style name="Theme.Saku" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.Saku.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
+        <item name="postSplashScreenTheme">@style/Theme.Saku</item>
+    </style>
+</resources>
