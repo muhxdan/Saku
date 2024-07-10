@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option java_package = "com.salt.apps.core.datastore";
+option java_multiple_files = true;
+
+
+enum LanguageConfigProto {
+    LANGUAGE_CONFIG_UNSPECIFIED = 0;
+    LANGUAGE_CONFIG_ID = 1;
+    LANGUAGE_CONFIG_EN = 2;
+}

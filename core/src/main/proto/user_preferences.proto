@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+import "dark_theme_config.proto";
+import "language_config.proto";
+
+option java_package = "com.salt.apps.core.datastore";
+option java_multiple_files = true;
+
+
+message UserPreferences {
+
+    DarkThemeConfigProto dark_theme_config = 1;
+    LanguageConfigProto language_config = 2;
+
+}
